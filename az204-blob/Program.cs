@@ -25,21 +25,15 @@ static async Task ProcessAsync(IConfigurationRoot configuration)
     Console.WriteLine("A container named '" + containerClient.Name + "' has been founded. " +
         "\nNext a file will be created and uploaded to the container.");
     
-    await UploadTextFileToBlob(containerClient, "");
+    await UploadTextFileToBlob(containerClient, "hello-az.txt");
     
-    Console.WriteLine("Press 'Enter' to continue.");
     Console.ReadLine();
-
 }
 
-static async Task UploadTextFileToBlob(BlobContainerClient containerClient, string filePath){
+static async Task UploadTextFileToBlob(BlobContainerClient containerClient, string fileName){
     // Create a local file in the ./data/ directory for uploading and downloading
     string localPath = "./data/";
-    string fileName = "wtfile" + Guid.NewGuid().ToString() + ".txt";
     string localFilePath = Path.Combine(localPath, fileName);
-
-    // Write text to the file
-    await File.WriteAllTextAsync(localFilePath, "Hello, World!");
 
     // Get a reference to the blob
     BlobClient blobClient = containerClient.GetBlobClient(fileName);
@@ -56,5 +50,4 @@ static async Task UploadTextFileToBlob(BlobContainerClient containerClient, stri
     Console.WriteLine("\nThe file was uploaded. We'll verify by listing" + 
             " the blobs next.");
     Console.WriteLine("Press 'Enter' to continue.");
-    Console.ReadLine();
 }
