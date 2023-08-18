@@ -25,7 +25,11 @@ static async Task ProcessAsync(IConfigurationRoot configuration)
     Console.WriteLine("A container named '" + containerClient.Name + "' has been founded. " +
         "\nNext a file will be created and uploaded to the container.");
     
-    await UploadTextFileToBlob(containerClient, "hello-az.txt");
+    // await UploadTextFileToBlob(containerClient, "hello-az.txt");
+    Console.WriteLine("\nThe file was uploaded. We'll verify by listing" + 
+            " the blobs next.");
+
+    await ListAllBlobs(containerClient);
     
     Console.ReadLine();
 }
@@ -47,7 +51,14 @@ static async Task UploadTextFileToBlob(BlobContainerClient containerClient, stri
         uploadFileStream.Close();
     }
 
-    Console.WriteLine("\nThe file was uploaded. We'll verify by listing" + 
-            " the blobs next.");
     Console.WriteLine("Press 'Enter' to continue.");
+}
+
+static async Task ListAllBlobs(BlobContainerClient containerClient)
+{
+    var blobs = containerClient.GetBlobsAsync();
+    await foreach(var blob in blobs)
+    {
+        Console.WriteLine($"{blob.Name}");
+    }
 }
